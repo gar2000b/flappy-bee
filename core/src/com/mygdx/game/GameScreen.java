@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -36,7 +38,19 @@ public class GameScreen extends ScreenAdapter {
     private Texture flowerTop;
     private Texture flappeeTexture;
 
+    private final AssetManager assetManager = new AssetManager();
+
     private int score = 0;
+
+    public GameScreen() {
+        assetManager.load("bg.png", Texture.class);
+        assetManager.load("flowerBottom.png", Texture.class);
+        assetManager.load("flowerTop.png", Texture.class);
+        assetManager.load("bee.png", Texture.class);
+        assetManager.finishLoading();
+
+        assetManager.getLogger().setLevel(Logger.DEBUG);
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -51,15 +65,15 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        flappeeTexture = new Texture(Gdx.files.internal("bee.png"));
+        flappeeTexture = assetManager.get("bee.png");
         flappee = new Flappee(flappeeTexture);
         flappee.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
         // flower.setPosition(40);
         bitmapFont = new BitmapFont();
         glyphLayout = new GlyphLayout();
-        background = new Texture(Gdx.files.internal("bg.png"));
-        flowerBottom = new Texture(Gdx.files.internal("flowerBottom.png"));
-        flowerTop = new Texture(Gdx.files.internal("flowerTop.png"));
+        background = assetManager.get("bg.png");
+        flowerBottom = assetManager.get("flowerBottom.png");
+        flowerTop = assetManager.get("flowerTop.png");
     }
 
     @Override
@@ -93,7 +107,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void updateFlappee(float delta) {
         flappee.update(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) flappee.flyUp();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) flappee.flyUp();
         blockFlappeeLeavingTheWorld();
     }
 
