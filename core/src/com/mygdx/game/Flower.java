@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -25,6 +26,7 @@ public class Flower {
 
     private float x = 0;
     private float y = 0;
+    private boolean pointClaimed = false;
 
     public Flower() {
         this.y = MathUtils.random(HEIGHT_OFFSET);
@@ -68,5 +70,23 @@ public class Flower {
 
     public float getY() {
         return y;
+    }
+
+    public boolean isFlappeeColliding(Flappee flappee) {
+        Circle flappeeCollisionCircle = flappee.getCollisionCircle();
+        return
+                Intersector.overlaps(flappeeCollisionCircle, ceilingCollisionCircle) ||
+                        Intersector.overlaps(flappeeCollisionCircle, floorCollisionCircle) ||
+                        Intersector.overlaps(flappeeCollisionCircle, ceilingCollisionRectangle) ||
+                        Intersector.overlaps(flappeeCollisionCircle, floorCollisionRectangle);
+
+    }
+
+    public boolean isPointClaimed() {
+        return pointClaimed;
+    }
+
+    public void markPointClaimed() {
+        pointClaimed = true;
     }
 }
