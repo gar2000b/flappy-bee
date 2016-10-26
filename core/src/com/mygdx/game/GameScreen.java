@@ -73,24 +73,28 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer.setProjectionMatrix(camera.projection);
         shapeRenderer.setTransformMatrix(camera.view);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        flappee.drawDebug(shapeRenderer);
+        // flappee.drawDebug(shapeRenderer);
         // flower.drawDebug(shapeRenderer);
         shapeRenderer.end();
 
         update(delta);
         draw();
-        drawDebug();
+        // drawDebug();
     }
 
     private void update(float delta) {
-        flappee.update();
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) flappee.flyUp();
-        blockFlappeeLeavingTheWorld();
+        updateFlappee(delta);
         updateFlowers(delta);
         updateScore();
         if (checkForCollision()) {
             restart();
         }
+    }
+
+    private void updateFlappee(float delta) {
+        flappee.update(delta);
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) flappee.flyUp();
+        blockFlappeeLeavingTheWorld();
     }
 
     private void restart() {
