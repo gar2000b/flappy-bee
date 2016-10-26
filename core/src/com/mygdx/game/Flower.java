@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -23,12 +25,19 @@ public class Flower {
     private final Rectangle floorCollisionRectangle;
     private final Circle ceilingCollisionCircle;
     private final Rectangle ceilingCollisionRectangle;
+    private final Texture floorTexture;
+    private final Texture ceilingTexture;
+
 
     private float x = 0;
     private float y = 0;
     private boolean pointClaimed = false;
 
-    public Flower() {
+    public Flower(Texture floorTexture, Texture ceilingTexture) {
+
+        this.floorTexture = floorTexture;
+        this.ceilingTexture = ceilingTexture;
+
         this.y = MathUtils.random(HEIGHT_OFFSET);
         this.floorCollisionRectangle = new Rectangle(x, y, COLLISION_RECTANGLE_WIDTH, COLLISION_RECTANGLE_HEIGHT);
         this.floorCollisionCircle = new Circle(x + floorCollisionRectangle.width / 2, y + floorCollisionRectangle.height, COLLISION_CIRCLE_RADIUS);
@@ -88,5 +97,22 @@ public class Flower {
 
     public void markPointClaimed() {
         pointClaimed = true;
+    }
+
+    public void draw(SpriteBatch batch) {
+        drawFloorFlower(batch);
+        drawCeilingFlower(batch);
+    }
+
+    private void drawFloorFlower(SpriteBatch batch) {
+        float textureX = floorCollisionCircle.x - floorTexture.getWidth() / 2;
+        float textureY = floorCollisionRectangle.getY() + COLLISION_CIRCLE_RADIUS;
+        batch.draw(floorTexture, textureX, textureY);
+    }
+
+    private void drawCeilingFlower(SpriteBatch batch) {
+        float textureX = ceilingCollisionCircle.x - ceilingTexture.getWidth() / 2;
+        float textureY = ceilingCollisionRectangle.getY() - COLLISION_CIRCLE_RADIUS;
+        batch.draw(ceilingTexture, textureX, textureY);
     }
 }

@@ -3,10 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,11 +26,15 @@ public class GameScreen extends ScreenAdapter {
     private Viewport viewport;
     private Camera camera;
     private SpriteBatch batch;
-    private Flappee flappee = new Flappee();
-    private Flower flower = new Flower();
+    private Flappee flappee;
+    // private Flower flower = new Flower();
     private Array<Flower> flowers = new Array<Flower>();
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
+    private Texture background;
+    private Texture flowerBottom;
+    private Texture flowerTop;
+    private Texture flappeeTexture;
 
     private int score = 0;
 
@@ -50,10 +51,15 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
+        flappeeTexture = new Texture(Gdx.files.internal("bee.png"));
+        flappee = new Flappee(flappeeTexture);
         flappee.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
-        flower.setPosition(40);
+        // flower.setPosition(40);
         bitmapFont = new BitmapFont();
         glyphLayout = new GlyphLayout();
+        background = new Texture(Gdx.files.internal("bg.png"));
+        flowerBottom = new Texture(Gdx.files.internal("flowerBottom.png"));
+        flowerTop = new Texture(Gdx.files.internal("flowerTop.png"));
     }
 
     @Override
@@ -111,7 +117,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void createNewFlower() {
-        Flower newFlower = new Flower();
+        Flower newFlower = new Flower(flowerBottom, flowerTop);
         newFlower.setPosition(WORLD_WIDTH + Flower.WIDTH);
         flowers.add(newFlower);
     }
@@ -176,7 +182,16 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
+        batch.draw(background, 0, 0);
+        drawFlowers();
+        flappee.draw(batch);
         drawScore();
         batch.end();
+    }
+
+    private void drawFlowers() {
+        for (Flower flower : flowers) {
+            flower.draw(batch);
+        }
     }
 }

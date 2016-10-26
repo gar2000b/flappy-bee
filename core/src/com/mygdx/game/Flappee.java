@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
@@ -12,12 +14,15 @@ public class Flappee {
     private static final float DIVE_ACCEL = 0.30F;
     private static final float FLY_ACCEL = 5F;
 
-    private float ySpeed = 0;
     private final Circle collisionCircle;
+    private final Texture flappeeTexture;
+
+    private float ySpeed = 0;
     private float x = 0;
     private float y = 0;
 
-    public Flappee() {
+    public Flappee(Texture flappeeTexture) {
+        this.flappeeTexture = flappeeTexture;
         collisionCircle = new Circle(x, y, COLLISION_RADIUS);
     }
 
@@ -57,5 +62,9 @@ public class Flappee {
 
     public Circle getCollisionCircle() {
         return collisionCircle;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.draw(flappeeTexture, collisionCircle.x, collisionCircle.y);
     }
 }
