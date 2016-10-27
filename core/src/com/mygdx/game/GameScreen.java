@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -31,10 +29,10 @@ public class GameScreen extends ScreenAdapter {
     private Array<Flower> flowers = new Array<Flower>();
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
-    private Texture background;
-    private Texture flowerBottom;
-    private Texture flowerTop;
-    private Texture flappeeTexture;
+    private TextureRegion background;
+    private TextureRegion flowerBottom;
+    private TextureRegion flowerTop;
+    private TextureRegion flappeeTexture;
 
     private final FlappeeBeeGame flappeeBeeGame;
 
@@ -57,15 +55,16 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        flappeeTexture = flappeeBeeGame.getAssetManager().get("bee.png");
+        // flower.setPosition(40);
+        glyphLayout = new GlyphLayout();
+        TextureAtlas textureAtlas = flappeeBeeGame.getAssetManager().get("flappee_bee_assets.atlas");
+        background = textureAtlas.findRegion("bg");
+        flowerBottom = textureAtlas.findRegion("flowerBottom");
+        flowerTop = textureAtlas.findRegion("flowerTop");
+        flappeeTexture = textureAtlas.findRegion("bee");
+        bitmapFont = flappeeBeeGame.getAssetManager().get("score.fnt");
         flappee = new Flappee(flappeeTexture);
         flappee.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
-        // flower.setPosition(40);
-        bitmapFont = new BitmapFont();
-        glyphLayout = new GlyphLayout();
-        background = flappeeBeeGame.getAssetManager().get("bg.png");
-        flowerBottom = flappeeBeeGame.getAssetManager().get("flowerBottom.png");
-        flowerTop = flappeeBeeGame.getAssetManager().get("flowerTop.png");
     }
 
     @Override
@@ -182,13 +181,15 @@ public class GameScreen extends ScreenAdapter {
 
     private void drawScore() {
         String scoreAsString = Integer.toString(score);
-        bitmapFont.getData().setScale(2);
+        // The following line scaled up the font because it was previously too small to render.
+        // bitmapFont.getData().setScale(2);
         glyphLayout.setText(bitmapFont, scoreAsString);
         bitmapFont.draw(batch, scoreAsString, (viewport.getWorldWidth() - glyphLayout.width) / 2, (4 * viewport
                 .getWorldHeight() / 5) - glyphLayout.height / 2);
     }
 
     private void draw() {
+        batch.totalRenderCalls = 0;
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
@@ -197,6 +198,7 @@ public class GameScreen extends ScreenAdapter {
         flappee.draw(batch);
         drawScore();
         batch.end();
+        // Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
     private void drawFlowers() {

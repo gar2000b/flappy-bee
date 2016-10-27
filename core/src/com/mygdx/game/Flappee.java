@@ -28,7 +28,7 @@ public class Flappee {
     private float y = 0;
     private float animationTimer = 0;
 
-    public Flappee(Texture flappeeTexture) {
+    public Flappee(TextureRegion flappeeTexture) {
         TextureRegion[][] flappeeTextures = new TextureRegion(flappeeTexture).split(TILE_WIDTH, TILE_HEIGHT);
 
         animation = new Animation(FRAME_DURATION, flappeeTextures[0][0], flappeeTextures[0][1]);

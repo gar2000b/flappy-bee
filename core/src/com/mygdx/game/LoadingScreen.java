@@ -2,7 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -40,10 +43,11 @@ public class LoadingScreen extends ScreenAdapter {
         camera.update();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
-        flappeeBeeGame.getAssetManager().load("bg.png", Texture.class);
-        flappeeBeeGame.getAssetManager().load("flowerBottom.png", Texture.class);
-        flappeeBeeGame.getAssetManager().load("flowerTop.png", Texture.class);
-        flappeeBeeGame.getAssetManager().load("bee.png", Texture.class);
+        flappeeBeeGame.getAssetManager().load("flappee_bee_assets.atlas", TextureAtlas.class);
+
+        BitmapFontLoader.BitmapFontParameter bitmapFontParameter = new BitmapFontLoader.BitmapFontParameter();
+        bitmapFontParameter.atlasName = "flappee_bee_assets.atlas";
+        flappeeBeeGame.getAssetManager().load("score.fnt", BitmapFont.class, bitmapFontParameter);
     }
 
     @Override
