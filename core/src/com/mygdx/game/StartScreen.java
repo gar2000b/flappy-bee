@@ -30,9 +30,9 @@ public class StartScreen extends ScreenAdapter {
     private Texture titleTexture;
     private Stage stage;
 
-    private final Game game;
+    private final FlappeeBeeGame game;
 
-    public StartScreen(Game game) {
+    public StartScreen(FlappeeBeeGame game) {
         this.game = game;
     }
 
@@ -53,7 +53,7 @@ public class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new GameScreen());
+                game.setScreen(new LoadingScreen(game));
                 dispose();
             }
         });
