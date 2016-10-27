@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -38,18 +36,12 @@ public class GameScreen extends ScreenAdapter {
     private Texture flowerTop;
     private Texture flappeeTexture;
 
-    private final AssetManager assetManager = new AssetManager();
+    private final FlappeeBeeGame flappeeBeeGame;
 
     private int score = 0;
 
-    public GameScreen() {
-        assetManager.load("bg.png", Texture.class);
-        assetManager.load("flowerBottom.png", Texture.class);
-        assetManager.load("flowerTop.png", Texture.class);
-        assetManager.load("bee.png", Texture.class);
-        assetManager.finishLoading();
-
-        assetManager.getLogger().setLevel(Logger.DEBUG);
+    public GameScreen(FlappeeBeeGame flappeeBeeGame) {
+        this.flappeeBeeGame = flappeeBeeGame;
     }
 
     @Override
@@ -65,15 +57,15 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        flappeeTexture = assetManager.get("bee.png");
+        flappeeTexture = flappeeBeeGame.getAssetManager().get("bee.png");
         flappee = new Flappee(flappeeTexture);
         flappee.setPosition(WORLD_WIDTH / 4, WORLD_HEIGHT / 2);
         // flower.setPosition(40);
         bitmapFont = new BitmapFont();
         glyphLayout = new GlyphLayout();
-        background = assetManager.get("bg.png");
-        flowerBottom = assetManager.get("flowerBottom.png");
-        flowerTop = assetManager.get("flowerTop.png");
+        background = flappeeBeeGame.getAssetManager().get("bg.png");
+        flowerBottom = flappeeBeeGame.getAssetManager().get("flowerBottom.png");
+        flowerTop = flappeeBeeGame.getAssetManager().get("flowerTop.png");
     }
 
     @Override

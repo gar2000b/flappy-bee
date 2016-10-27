@@ -63,7 +63,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update() {
         if (flappeeBeeGame.getAssetManager().update()) {
-            flappeeBeeGame.setScreen(new GameScreen());
+            flappeeBeeGame.setScreen(new GameScreen(flappeeBeeGame));
         } else {
             progress = flappeeBeeGame.getAssetManager().getProgress();
         }
